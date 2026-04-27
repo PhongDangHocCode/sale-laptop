@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard | LapTop Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        font-family: Inter, system-ui, sans-serif;
+        background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.14), transparent 28%),
+          radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.16), transparent 32%);
+      }
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.78);
+        backdrop-filter: blur(18px);
+      }
+    </style>
+  </head>
+  <body class="min-h-screen text-slate-900">
+    <div class="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <header class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
+        <div class="inline-flex items-center gap-3">
+          <div class="w-12 h-12 rounded-3xl bg-indigo-600 text-white grid place-items-center shadow-xl">
+            <span class="font-bold">A</span>
+          </div>
+          <div>
+            <p class="text-sm uppercase tracking-[0.24em] text-slate-500">Admin Panel</p>
+            <h1 class="text-2xl font-semibold text-slate-900">LapTop Store Admin</h1>
+          </div>
+        </div>
+        <a href="index.html" class="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50 transition">
+          Về trang người dùng
+        </a>
+      </header>
+
+      <div class="grid gap-8 lg:grid-cols-[0.9fr,0.65fr]">
+        <section class="glass-panel rounded-[2rem] border border-slate-200 p-8 shadow-2xl">
+          <div class="flex items-center justify-between gap-4 mb-8">
+            <div>
+              <p class="text-slate-500 uppercase tracking-[0.2em] text-xs">Bảng điều khiển</p>
+              <h2 class="mt-3 text-3xl font-semibold text-slate-900">Quản lý admin</h2>
+            </div>
+            <div id="adminStatus" class="rounded-full bg-emerald-100 px-4 py-2 text-sm font-semibold text-emerald-700">Chưa đăng nhập</div>
+          </div>
+
+          <div id="loginCard" class="space-y-6">
+            <div class="rounded-[2rem] bg-slate-50 p-6 shadow-sm">
+              <p class="text-slate-600">Sử dụng tài khoản admin để đăng nhập và quản lý sản phẩm.</p>
+            </div>
+            <form id="adminLoginForm" class="space-y-4 rounded-[2rem] bg-white p-6 shadow-lg" autocomplete="off">
+              <div>
+                <label class="block text-sm font-medium text-slate-700">Tên đăng nhập</label>
+                <input id="adminLoginUsername" autocomplete="off" required class="mt-2 w-full rounded-3xl border border-slate-300 px-4 py-3 outline-none focus:border-indigo-500" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700">Mật khẩu</label>
+                <input id="adminLoginPassword" type="password" autocomplete="new-password" required class="mt-2 w-full rounded-3xl border border-slate-300 px-4 py-3 outline-none focus:border-indigo-500" />
+              </div>
+              <button type="submit" class="inline-flex w-full justify-center rounded-full bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-indigo-500">Đăng nhập Admin</button>
+            </form>
+          </div>
+
+          <div id="dashboard" class="hidden space-y-8">
+            <div class="grid gap-4 sm:grid-cols-4">
+              <div class="rounded-[2rem] bg-white p-6 shadow-sm">
+                <p class="text-sm text-slate-500">Sản phẩm</p>
+                <p id="dashTotalProducts" class="mt-4 text-3xl font-semibold text-slate-900">0</p>
+              </div>
+              <div class="rounded-[2rem] bg-white p-6 shadow-sm">
+                <p class="text-sm text-slate-500">Giá trị kho</p>
+                <p id="dashTotalValue" class="mt-4 text-3xl font-semibold text-slate-900">0₫</p>
+              </div>
+              <div class="rounded-[2rem] bg-white p-6 shadow-sm">
+                <p class="text-sm text-slate-500">Đơn hàng</p>
+                <p id="dashTotalOrders" class="mt-4 text-3xl font-semibold text-slate-900">0</p>
+              </div>
+              <div class="rounded-[2rem] bg-white p-6 shadow-sm">
+                <p class="text-sm text-slate-500">Danh mục</p>
+                <p id="dashTotalCategories" class="mt-4 text-3xl font-semibold text-slate-900">0</p>
+              </div>
+            </div>
+            <div class="grid gap-6 lg:grid-cols-2">
+              <div class="rounded-[2rem] bg-white p-6 shadow-sm">
+                <h3 class="text-xl font-semibold text-slate-900">Thêm sản phẩm mới</h3>
+                <form id="adminNewProductForm" class="mt-6 space-y-4">
+                  <div>
+                    <label class="block text-sm text-slate-600">Tên sản phẩm</label>
+                    <input id="adminProductName" required class="mt-2 w-full rounded-3xl border border-slate-300 px-4 py-3 outline-none focus:border-indigo-500" />
+                  </div>
+                  <div>
+                    <label class="block text-sm text-slate-600">Giá</label>
+                    <input id="adminProductPrice" type="number" min="0" required class="mt-2 w-full rounded-3xl border border-slate-300 px-4 py-3 outline-none focus:border-indigo-500" />
+                  </div>
+                  <div>
+                    <label class="block text-sm text-slate-600">Tag</label>
+                    <input id="adminProductTag" value="New" class="mt-2 w-full rounded-3xl border border-slate-300 px-4 py-3 outline-none focus:border-indigo-500" />
+                  </div>
+                  <div>
+                    <label class="block text-sm text-slate-600">Mô tả</label>
+                    <textarea id="adminProductDesc" rows="3" class="mt-2 w-full rounded-3xl border border-slate-300 px-4 py-3 outline-none focus:border-indigo-500"></textarea>
+                  </div>
+                  <div>
+                    <label class="block text-sm text-slate-600">Thông số</label>
+                    <input id="adminProductSpecs" placeholder="CPU, GPU, RAM" class="mt-2 w-full rounded-3xl border border-slate-300 px-4 py-3 outline-none focus:border-indigo-500" />
+                  </div>
+                  <button class="inline-flex w-full justify-center rounded-full bg-indigo-600 px-6 py-3 text-sm font-semibold text-white hover:bg-indigo-500">Lưu sản phẩm</button>
+                </form>
+              </div>
+              <div class="rounded-[2rem] bg-white p-6 shadow-sm">
+                <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <h3 class="text-xl font-semibold text-slate-900">Sản phẩm có sẵn</h3>
+                  <input id="adminSearch" placeholder="Tìm sản phẩm..." class="rounded-full border border-slate-300 px-4 py-2 text-sm outline-none focus:border-indigo-500" />
+                </div>
+                <div id="adminProductList" class="mt-6 space-y-4"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="rounded-[2rem] bg-slate-950 px-8 py-10 text-white shadow-2xl">
+          <div class="space-y-6">
+            <div>
+              <p class="text-sm uppercase tracking-[0.2em] text-indigo-300">Tiện ích</p>
+              <h2 class="mt-4 text-3xl font-semibold">Giao diện riêng cho admin</h2>
+            </div>
+            <div class="rounded-[2rem] bg-slate-900/90 p-6">
+              <p class="text-slate-300">Quản lý sản phẩm, xem thống kê kho và số đơn hàng. Mục đích demo để admin xem báo cáo nhanh.</p>
+            </div>
+            <div class="rounded-[2rem] bg-slate-900/90 p-6">
+              <p class="text-slate-300">Nếu chưa đăng nhập, hãy sử dụng tài khoản admin để truy cập mọi tính năng.</p>
+            </div>
+            <button id="adminLogoutBtn" class="w-full rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-900 shadow-lg hover:bg-slate-100 hidden">Đăng xuất</button>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <div id="editProductModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/70 p-4">
+      <div class="w-full max-w-lg rounded-[2rem] bg-white p-8 shadow-2xl">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-2xl font-semibold text-slate-900">Chỉnh sửa sản phẩm</h2>
+            <p class="mt-2 text-sm text-slate-500">Cập nhật thông tin sản phẩm nhanh chóng.</p>
+          </div>
+          <button id="closeEditModal" class="text-slate-500 hover:text-slate-900 text-3xl leading-none">&times;</button>
+        </div>
+        <form id="editProductForm" class="mt-6 space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-700">Tên sản phẩm</label>
+            <input id="editProductName" required class="mt-2 w-full rounded-3xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700">Giá</label>
+            <input id="editProductPrice" type="number" min="0" required class="mt-2 w-full rounded-3xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700">Tag</label>
+            <input id="editProductTag" class="mt-2 w-full rounded-3xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700">Mô tả</label>
+            <textarea id="editProductDesc" rows="3" class="mt-2 w-full rounded-3xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500"></textarea>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700">Thông số</label>
+            <input id="editProductSpecs" placeholder="CPU, GPU, RAM" class="mt-2 w-full rounded-3xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500" />
+          </div>
+          <button class="inline-flex w-full justify-center rounded-full bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-indigo-500">Lưu thay đổi</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      const adminLoginForm = document.getElementById('adminLoginForm');
+      const adminLoginUsername = document.getElementById('adminLoginUsername');
+      const adminLoginPassword = document.getElementById('adminLoginPassword');
+      const loginCard = document.getElementById('loginCard');
+      const dashboard = document.getElementById('dashboard');
+      const adminStatus = document.getElementById('adminStatus');
+      const dashTotalProducts = document.getElementById('dashTotalProducts');
+      const dashTotalValue = document.getElementById('dashTotalValue');
+      const dashTotalOrders = document.getElementById('dashTotalOrders');
+      const dashTotalCategories = document.getElementById('dashTotalCategories');
+      const adminProductList = document.getElementById('adminProductList');
+      const adminSearch = document.getElementById('adminSearch');
+      const adminNewProductForm = document.getElementById('adminNewProductForm');
+      const adminProductName = document.getElementById('adminProductName');
+      const adminProductPrice = document.getElementById('adminProductPrice');
+      const adminProductTag = document.getElementById('adminProductTag');
+      const adminProductDesc = document.getElementById('adminProductDesc');
+      const adminProductSpecs = document.getElementById('adminProductSpecs');
+      const adminLogoutBtn = document.getElementById('adminLogoutBtn');
+      const editProductModal = document.getElementById('editProductModal');
+      const editProductName = document.getElementById('editProductName');
+      const editProductPrice = document.getElementById('editProductPrice');
+      const editProductTag = document.getElementById('editProductTag');
+      const editProductDesc = document.getElementById('editProductDesc');
+      const editProductSpecs = document.getElementById('editProductSpecs');
+      const editProductForm = document.getElementById('editProductForm');
+      const closeEditModal = document.getElementById('closeEditModal');
+
+      let totalOrders = 32;
+      let currentEditIndex = null;
+      const products = [
+        { name: 'ProBlade 16', price: 26490000, tag: 'Bestseller', description: 'Laptop gaming mỏng nhẹ, màn hình 16" 240Hz.', specs: ['Intel Core i7', 'RTX 4070'] },
+        { name: 'UltraWork 15', price: 32990000, tag: 'Workstation', description: 'Kết hợp hiệu năng và bền bỉ cho công việc chuyên sâu.', specs: ['Ryzen 9', '32GB RAM'] },
+        { name: 'CreatorFlow 14', price: 29990000, tag: 'Creator', description: 'Thiết kế sáng tạo, hiển thị rực rỡ và pin lâu dài.', specs: ['OLED 2.8K', '1TB SSD'] },
+        { name: 'AirPro 13', price: 18990000, tag: 'Light', description: 'Laptop siêu mỏng nhẹ, phù hợp học tập và văn phòng.', specs: ['Intel Core i5', '16GB RAM'] },
+        { name: 'BattleMax 17', price: 38990000, tag: 'Gaming', description: 'Màn hình 17" cực đã, loa sống động và cấu hình chiến tốt.', specs: ['Intel Core i9', 'RTX 4080'] },
+        { name: 'StudioZen 16', price: 34990000, tag: 'Design', description: 'Hiệu năng vẽ, dựng phim và sáng tạo nội dung chuyên nghiệp.', specs: ['Ryzen 7', '2TB SSD'] },
+        { name: 'CampusPro 14', price: 21990000, tag: 'Office', description: 'Laptop văn phòng ổn định, pin 10 giờ và mở máy nhanh.', specs: ['Intel Core i5', '256GB SSD'] },
+        { name: 'CreatorMax 16', price: 37990000, tag: 'Creator', description: 'Xử lý đồ họa, video và livestream mượt mà.', specs: ['M2 Pro', '32GB RAM'] },
+        { name: 'TitanX 15', price: 42990000, tag: 'Ultimate', description: 'Laptop mạnh nhất, dành cho game thủ và biên tập viên chuyên nghiệp.', specs: ['Core i9', 'RTX 4090'] }
+      ];
+
+      function formatCurrency(amount) {
+        return amount.toLocaleString('vi-VN') + '₫';
+      }
+
+      function renderProductList(filter = '') {
+        const normalizedFilter = filter.toLowerCase();
+        const filteredProducts = products.filter(product => product.name.toLowerCase().includes(normalizedFilter) || product.tag.toLowerCase().includes(normalizedFilter));
+
+        adminProductList.innerHTML = filteredProducts
+          .map((product, index) => `
+            <div class="rounded-[2rem] border border-slate-200 bg-slate-100 p-5 shadow-sm transition hover:-translate-y-1">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <p class="text-sm uppercase tracking-[0.18em] text-slate-500">${product.tag}</p>
+                  <h3 class="mt-3 text-xl font-semibold text-slate-900">${product.name}</h3>
+                  <p class="mt-2 text-sm text-slate-600">${product.description}</p>
+                  <div class="mt-4 flex flex-wrap gap-2 text-xs text-slate-700">
+                    ${product.specs.map(spec => `<span class="rounded-full bg-white px-3 py-1 shadow-sm">${spec}</span>`).join('')}
+                  </div>
+                </div>
+                <div class="text-right">
+                  <p class="text-2xl font-semibold text-slate-900">${formatCurrency(product.price)}</p>
+                  <div class="mt-4 flex flex-col gap-3">
+                    <button data-index="${index}" class="edit-product rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">Sửa</button>
+                    <button data-index="${index}" class="delete-product rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Xóa</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `)
+          .join('');
+
+        document.querySelectorAll('.edit-product').forEach(button => {
+          button.addEventListener('click', () => openEditModal(Number(button.dataset.index)));
+        });
+
+        document.querySelectorAll('.delete-product').forEach(button => {
+          button.addEventListener('click', () => {
+            const index = Number(button.dataset.index);
+            if (confirm(`Xóa sản phẩm \"${products[index].name}\" khỏi kho?`)) {
+              products.splice(index, 1);
+              renderProductList(adminSearch.value);
+              refreshDashboard();
+            }
+          });
+        });
+      }
+
+      function refreshDashboard() {
+        const categories = [...new Set(products.map(product => product.tag))];
+        dashTotalProducts.textContent = products.length;
+        dashTotalValue.textContent = formatCurrency(products.reduce((sum, item) => sum + item.price, 0));
+        dashTotalOrders.textContent = totalOrders;
+        dashTotalCategories.textContent = categories.length;
+        renderProductList(adminSearch.value);
+      }
+
+      function openEditModal(index) {
+        currentEditIndex = index;
+        const product = products[index];
+        editProductName.value = product.name;
+        editProductPrice.value = product.price;
+        editProductTag.value = product.tag;
+        editProductDesc.value = product.description;
+        editProductSpecs.value = product.specs.join(', ');
+        editProductModal.classList.remove('hidden');
+      }
+
+      function closeEditModalWindow() {
+        editProductModal.classList.add('hidden');
+      }
+
+      function setAdminMode(isLogged) {
+        if (isLogged) {
+          loginCard.classList.add('hidden');
+          dashboard.classList.remove('hidden');
+          adminStatus.textContent = 'Đã đăng nhập';
+          adminStatus.classList.remove('bg-emerald-100', 'text-emerald-700');
+          adminStatus.classList.add('bg-indigo-100', 'text-indigo-700');
+          adminLogoutBtn.classList.remove('hidden');
+          refreshDashboard();
+        } else {
+          loginCard.classList.remove('hidden');
+          dashboard.classList.add('hidden');
+          adminStatus.textContent = 'Chưa đăng nhập';
+          adminStatus.classList.remove('bg-indigo-100', 'text-indigo-700');
+          adminStatus.classList.add('bg-emerald-100', 'text-emerald-700');
+          adminLogoutBtn.classList.add('hidden');
+        }
+      }
+
+      adminLoginForm.addEventListener('submit', event => {
+        event.preventDefault();
+        const username = adminLoginUsername.value.trim();
+        const password = adminLoginPassword.value.trim();
+
+        if (username === 'admin' && password === 'admin123') {
+          setAdminMode(true);
+          adminLoginForm.reset();
+          return;
+        }
+
+        alert('Thông tin đăng nhập không đúng. Vui lòng thử lại.');
+      });
+
+      adminNewProductForm.addEventListener('submit', event => {
+        event.preventDefault();
+        const name = adminProductName.value.trim();
+        const price = Number(adminProductPrice.value);
+        const tag = adminProductTag.value.trim() || 'New';
+        const description = adminProductDesc.value.trim();
+        const specs = adminProductSpecs.value.split(',').map(item => item.trim()).filter(Boolean);
+
+        products.unshift({ name, price, tag, description, specs: specs.length ? specs : ['CPU mới'] });
+        refreshDashboard();
+        adminNewProductForm.reset();
+        alert('Sản phẩm đã được thêm vào danh sách.');
+      });
+
+      adminSearch.addEventListener('input', () => {
+        renderProductList(adminSearch.value);
+      });
+
+      editProductForm.addEventListener('submit', event => {
+        event.preventDefault();
+        if (currentEditIndex === null) return;
+        products[currentEditIndex] = {
+          name: editProductName.value.trim(),
+          price: Number(editProductPrice.value),
+          tag: editProductTag.value.trim() || 'New',
+          description: editProductDesc.value.trim(),
+          specs: editProductSpecs.value.split(',').map(item => item.trim()).filter(Boolean)
+        };
+        closeEditModalWindow();
+        refreshDashboard();
+        alert('Sản phẩm đã được cập nhật.');
+      });
+
+      closeEditModal.addEventListener('click', closeEditModalWindow);
+      editProductModal.addEventListener('click', event => {
+        if (event.target === editProductModal) closeEditModalWindow();
+      });
+
+      adminLogoutBtn.addEventListener('click', () => {
+        setAdminMode(false);
+      });
+
+      setAdminMode(false);
+    </script>
+  </body>
+</html>

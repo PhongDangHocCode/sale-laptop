@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LapTop Store | Bán Laptop Cao Cấp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        font-family: Inter, system-ui, sans-serif;
+        background: radial-gradient(circle at top, rgba(59, 130, 246, 0.12), transparent 35%),
+          radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.12), transparent 30%);
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.76);
+        backdrop-filter: blur(18px);
+      }
+      .hero-glow {
+        box-shadow: 0 40px 120px rgba(99, 102, 241, 0.18);
+      }
+      .btn-primary {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 18px 40px rgba(59, 130, 246, 0.25);
+      }
+      .product-card:hover {
+        transform: translateY(-6px);
+      }
+      .add-to-cart {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .add-to-cart:active {
+        transform: scale(0.96);
+      }
+      .cart-toast {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 60;
+        min-width: 260px;
+        background: rgba(15, 23, 42, 0.95);
+        color: white;
+        padding: 14px 18px;
+        border-radius: 1.5rem;
+        box-shadow: 0 24px 60px rgba(15, 23, 42, 0.25);
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.25s ease, transform 0.25s ease;
+      }
+      .cart-toast.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    </style>
+  </head>
+  <body class="text-slate-900">
+    <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+      <header class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between py-6">
+        <a href="#" class="inline-flex items-center gap-3 text-slate-900">
+          <div class="w-11 h-11 rounded-2xl bg-indigo-600 text-white grid place-items-center shadow-lg">
+            <span class="font-bold">L</span>
+          </div>
+          <div>
+            <p class="font-semibold text-sm uppercase tracking-[0.24em]">LapTop Store</p>
+            <p class="text-xs text-slate-500">Laptop cao cấp, giá tốt</p>
+          </div>
+        </a>
+        <nav class="hidden md:flex items-center gap-8 text-sm text-slate-600">
+          <a href="#models" class="hover:text-slate-900 transition">Sản phẩm</a>
+          <a href="#features" class="hover:text-slate-900 transition">Tính năng</a>
+          <a href="#reviews" class="hover:text-slate-900 transition">Đánh giá</a>
+          <a href="#contact" class="hover:text-slate-900 transition">Liên hệ</a>
+        </nav>
+        <div class="flex items-center gap-3">
+          <a href="admin.html" class="rounded-full border border-indigo-600 px-5 py-3 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 transition">
+            Admin
+          </a>
+          <div id="userBadge" class="hidden items-center gap-2 rounded-full bg-slate-100 px-4 py-2 text-sm text-slate-700">
+            <span class="font-semibold">Xin chào, <span id="userName">Khách</span></span>
+            <span class="rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700" id="userRole">USER</span>
+          </div>
+          <button id="authBtn" class="rounded-full bg-slate-900 px-5 py-3 text-white text-sm shadow-lg hover:bg-slate-700 transition">
+            Đăng nhập
+          </button>
+          <button id="cartBtn" class="hidden md:inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-white text-sm shadow-lg hover:bg-slate-700 transition">
+            Giỏ hàng <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-indigo-500 text-xs">0</span>
+          </button>
+        </div>
+      </header>
+      <main>
+        <section class="grid gap-10 lg:grid-cols-[1.1fr,0.9fr] items-center py-12 lg:py-20">
+          <div class="space-y-6">
+            <p class="inline-flex items-center gap-2 rounded-full bg-indigo-50 px-4 py-2 text-indigo-600 text-sm font-medium">
+              <span class="h-2 w-2 rounded-full bg-indigo-600"></span>
+              Laptop Gaming &amp; Workstation 2026
+            </p>
+            <h1 class="text-4xl sm:text-5xl font-semibold tracking-tight text-slate-900 leading-tight">
+              Tăng tốc công việc và giải trí với laptop hiệu năng cao.
+            </h1>
+            <p class="max-w-2xl text-slate-600 text-lg leading-8">
+              Khám phá bộ sưu tập laptop mới nhất, thiết kế mỏng nhẹ, pin bền và cấu hình mạnh mẽ. Dễ dàng mua ngay với giá ưu đãi, giao nhanh toàn quốc.
+            </p>
+            <div class="flex flex-col gap-4 sm:flex-row items-start sm:items-center">
+              <a href="#models" class="btn-primary inline-flex items-center justify-center rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-slate-800">
+                Xem sản phẩm
+              </a>
+              <a href="#contact" class="inline-flex items-center justify-center rounded-full border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition">
+                Nhận tư vấn miễn phí
+              </a>
+            </div>
+            <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
+              <div class="rounded-3xl bg-slate-50 p-5 shadow-sm">
+                <p class="text-sm text-slate-500">Bảo hành</p>
+                <p class="mt-2 text-lg font-semibold text-slate-900">2 năm chính hãng</p>
+              </div>
+              <div class="rounded-3xl bg-slate-50 p-5 shadow-sm">
+                <p class="text-sm text-slate-500">Giao hàng</p>
+                <p class="mt-2 text-lg font-semibold text-slate-900">Miễn phí toàn quốc</p>
+              </div>
+              <div class="rounded-3xl bg-slate-50 p-5 shadow-sm">
+                <p class="text-sm text-slate-500">Hỗ trợ</p>
+                <p class="mt-2 text-lg font-semibold text-slate-900">24/7 tư vấn</p>
+              </div>
+            </div>
+          </div>
+          <div class="relative">
+            <div class="hero-glow rounded-[2rem] p-6 glass-card shadow-2xl">
+              <div class="overflow-hidden rounded-[1.8rem] bg-slate-950 px-6 py-8 text-white">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-sm uppercase tracking-[0.2em] text-slate-300">Laptop cao cấp</p>
+                    <h2 class="mt-4 text-3xl font-semibold">ZenBook Neo 14</h2>
+                  </div>
+                  <span class="rounded-full bg-indigo-500 px-4 py-2 text-sm font-semibold">Hot</span>
+                </div>
+                <div class="mt-8 grid gap-4 sm:grid-cols-2">
+                  <div class="rounded-3xl bg-white/10 p-4">
+                    <p class="text-xs uppercase text-slate-400">CPU</p>
+                    <p class="mt-2 text-lg font-semibold">Intel Core i9</p>
+                  </div>
+                  <div class="rounded-3xl bg-white/10 p-4">
+                    <p class="text-xs uppercase text-slate-400">Màn hình</p>
+                    <p class="mt-2 text-lg font-semibold">14" OLED</p>
+                  </div>
+                </div>
+                <div class="mt-8 flex flex-wrap gap-3">
+                  <span class="rounded-full bg-white/10 px-4 py-2 text-sm">16GB RAM</span>
+                  <span class="rounded-full bg-white/10 px-4 py-2 text-sm">1TB SSD</span>
+                  <span class="rounded-full bg-white/10 px-4 py-2 text-sm">RTX 4060</span>
+                </div>
+                <div class="mt-8 flex items-center justify-between gap-4">
+                  <div>
+                    <p class="text-sm text-slate-400">Giá chỉ từ</p>
+                    <p class="text-4xl font-semibold">19.990.000₫</p>
+                  </div>
+                  <button class="btn-primary rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-950 hover:bg-slate-100">
+                    Mua ngay
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="pointer-events-none absolute -bottom-8 -right-8 h-32 w-32 rounded-full bg-indigo-500/20 blur-3xl"></div>
+          </div>
+        </section>
+        <section id="models" class="py-12 lg:py-20">
+          <div class="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p class="text-indigo-600 font-semibold">Bộ sưu tập</p>
+              <h2 class="mt-3 text-3xl sm:text-4xl font-semibold text-slate-900">Laptop dành cho mọi nhu cầu</h2>
+            </div>
+            <p class="max-w-xl text-slate-600">Chọn mẫu laptop phù hợp nhất với công việc, giải trí và học tập. Thiết kế đẹp, cấu hình mạnh, giá cạnh tranh.</p>
+          </div>
+          <div id="productGrid" class="grid gap-6 md:grid-cols-2 xl:grid-cols-3"></div>
+        </section>
+        <section id="features" class="py-12 lg:py-20">
+          <div class="grid gap-10 lg:grid-cols-3">
+            <div class="glass-card rounded-[2rem] border border-slate-200 p-8 shadow-xl">
+              <h3 class="text-xl font-semibold text-slate-900">Hiệu năng đỉnh cao</h3>
+              <p class="mt-4 text-slate-600">CPU và GPU mới nhất giúp xử lý công việc, render và chơi game với tốc độ mượt mà.</p>
+            </div>
+            <div class="glass-card rounded-[2rem] border border-slate-200 p-8 shadow-xl">
+              <h3 class="text-xl font-semibold text-slate-900">Thiết kế sang trọng</h3>
+              <p class="mt-4 text-slate-600">Vỏ nhôm tinh tế, bản lề chắc chắn và màn hình viền mỏng đem tới trải nghiệm chuyên nghiệp.</p>
+            </div>
+            <div class="glass-card rounded-[2rem] border border-slate-200 p-8 shadow-xl">
+              <h3 class="text-xl font-semibold text-slate-900">Dịch vụ hoàn hảo</h3>
+              <p class="mt-4 text-slate-600">Bảo hành chính hãng, hỗ trợ kỹ thuật 24/7 và đổi trả nhanh chóng.</p>
+            </div>
+          </div>
+        </section>
+        <section id="reviews" class="py-12 lg:py-20">
+          <div class="mb-10">
+            <p class="text-indigo-600 font-semibold">Khách hàng nói gì</p>
+            <h2 class="mt-3 text-3xl sm:text-4xl font-semibold text-slate-900">Đánh giá 5 sao từ người dùng</h2>
+          </div>
+          <div class="grid gap-6 lg:grid-cols-3">
+            <div class="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm">
+              <p class="text-slate-600">"Laptop chạy rất mượt, thiết kế đẹp và pin trâu. Mua về làm việc lẫn giải trí đều tuyệt vời."</p>
+              <div class="mt-6 flex items-center gap-4">
+                <div class="h-14 w-14 rounded-full bg-indigo-100 grid place-items-center text-indigo-600 font-bold">T</div>
+                <div>
+                  <p class="font-semibold text-slate-900">Thảo</p>
+                  <p class="text-sm text-slate-500">Designer</p>
+                </div>
+              </div>
+            </div>
+            <div class="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm">
+              <p class="text-slate-600">"Dịch vụ tư vấn rất nhanh, giao hàng đúng hẹn. Mình rất hài lòng với ProBlade 16."</p>
+              <div class="mt-6 flex items-center gap-4">
+                <div class="h-14 w-14 rounded-full bg-indigo-100 grid place-items-center text-indigo-600 font-bold">N</div>
+                <div>
+                  <p class="font-semibold text-slate-900">Nam</p>
+                  <p class="text-sm text-slate-500">Streamer</p>
+                </div>
+              </div>
+            </div>
+            <div class="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm">
+              <p class="text-slate-600">"Mua máy xong được lắp sẵn Windows và phần mềm, cực kỳ tiện lợi. Chất lượng sản phẩm rất tốt."</p>
+              <div class="mt-6 flex items-center gap-4">
+                <div class="h-14 w-14 rounded-full bg-indigo-100 grid place-items-center text-indigo-600 font-bold">H</div>
+                <div>
+                  <p class="font-semibold text-slate-900">Huy</p>
+                  <p class="text-sm text-slate-500">Nhân viên IT</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section id="contact" class="rounded-[2rem] bg-slate-950 px-8 py-12 text-white shadow-2xl">
+          <div class="grid gap-10 lg:grid-cols-[1.2fr,0.8fr] items-center">
+            <div>
+              <p class="text-indigo-400 font-semibold uppercase tracking-[0.2em]">Liên hệ</p>
+              <h2 class="mt-4 text-3xl font-semibold">Nhanh tay đặt hàng, nhận ưu đãi đặc biệt.</h2>
+              <p class="mt-4 max-w-xl text-slate-300">Chúng tôi hỗ trợ tùy chọn cấu hình, thanh toán linh hoạt và giao hàng nhanh 1-2 ngày.</p>
+            </div>
+            <div class="space-y-4 rounded-[2rem] bg-slate-900/90 p-8 shadow-xl">
+              <div>
+                <p class="text-sm text-slate-400">Hotline</p>
+                <p class="mt-2 text-lg font-semibold">1900 1234</p>
+              </div>
+              <div>
+                <p class="text-sm text-slate-400">Email</p>
+                <p class="mt-2 text-lg font-semibold">support@laptopstore.vn</p>
+              </div>
+              <div>
+                <p class="text-sm text-slate-400">Địa chỉ</p>
+                <p class="mt-2 text-lg font-semibold">123 Đường Công Nghệ, Quận 1, TP.HCM</p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section id="adminPanel" class="hidden rounded-[2rem] bg-white px-8 py-12 shadow-2xl mb-12">
+          <div class="grid gap-8 lg:grid-cols-2">
+            <div class="space-y-6">
+              <div>
+                <p class="text-indigo-600 font-semibold uppercase tracking-[0.2em]">Bảng quản trị</p>
+                <h2 class="mt-4 text-3xl font-semibold text-slate-900">Chỉ dành cho Admin</h2>
+                <p class="mt-4 text-slate-600">Thêm sản phẩm mới, xem thống kê và quản lý danh mục laptop ngay trong trang.</p>
+              </div>
+              <div class="grid gap-4 sm:grid-cols-3">
+                <div class="rounded-3xl bg-slate-50 p-6">
+                  <p class="text-sm text-slate-500">Tổng sản phẩm</p>
+                  <p id="adminStatsTotal" class="mt-3 text-3xl font-semibold text-slate-900">0</p>
+                </div>
+                <div class="rounded-3xl bg-slate-50 p-6">
+                  <p class="text-sm text-slate-500">Giá trị kho</p>
+                  <p id="adminStatsValue" class="mt-3 text-3xl font-semibold text-slate-900">0₫</p>
+                </div>
+                <div class="rounded-3xl bg-slate-50 p-6">
+                  <p class="text-sm text-slate-500">Đơn hàng</p>
+                  <p id="adminStatsOrders" class="mt-3 text-3xl font-semibold text-slate-900">0</p>
+                </div>
+              </div>
+            </div>
+            <div class="rounded-[2rem] bg-slate-950 px-6 py-8 text-white shadow-xl">
+              <h3 class="text-xl font-semibold">Thêm sản phẩm mới</h3>
+              <form id="newProductForm" class="mt-6 space-y-4">
+                <div>
+                  <label class="block text-sm text-slate-300">Tên sản phẩm</label>
+                  <input id="newProductName" required class="mt-2 w-full rounded-3xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-white outline-none focus:border-indigo-500" />
+                </div>
+                <div>
+                  <label class="block text-sm text-slate-300">Giá</label>
+                  <input id="newProductPrice" type="number" min="0" required class="mt-2 w-full rounded-3xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-white outline-none focus:border-indigo-500" />
+                </div>
+                <div>
+                  <label class="block text-sm text-slate-300">Tag</label>
+                  <input id="newProductTag" required value="New" class="mt-2 w-full rounded-3xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-white outline-none focus:border-indigo-500" />
+                </div>
+                <div>
+                  <label class="block text-sm text-slate-300">Mô tả</label>
+                  <textarea id="newProductDesc" rows="3" required class="mt-2 w-full rounded-3xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-white outline-none focus:border-indigo-500"></textarea>
+                </div>
+                <div>
+                  <label class="block text-sm text-slate-300">Thông số (phân tách bằng dấu phẩy)</label>
+                  <input id="newProductSpecs" placeholder="CPU, GPU, RAM" class="mt-2 w-full rounded-3xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-white outline-none focus:border-indigo-500" />
+                </div>
+                <button class="inline-flex w-full justify-center rounded-full bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-indigo-500">Thêm sản phẩm</button>
+              </form>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="loginModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/70 p-4">
+      <div class="w-full max-w-md rounded-[2rem] bg-white p-8 shadow-2xl">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-2xl font-semibold text-slate-900">Đăng nhập</h2>
+            <p class="mt-2 text-sm text-slate-500">Sử dụng tài khoản admin hoặc user để thử nghiệm.</p>
+          </div>
+          <button id="closeLogin" class="text-slate-500 hover:text-slate-900 text-3xl leading-none">&times;</button>
+        </div>
+        <form id="loginForm" class="mt-6 space-y-4" autocomplete="off">
+          <div>
+            <label class="block text-sm font-medium text-slate-700">Tên đăng nhập</label>
+            <input id="loginUsername" autocomplete="off" required class="mt-2 w-full rounded-3xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700">Mật khẩu</label>
+            <input id="loginPassword" type="password" autocomplete="new-password" required class="mt-2 w-full rounded-3xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500" />
+          </div>
+          <button type="submit" class="inline-flex w-full justify-center rounded-full bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-indigo-500">Đăng nhập</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="cartModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/75 p-4">
+      <div class="w-full max-w-2xl overflow-hidden rounded-[2rem] bg-white shadow-2xl">
+        <div class="flex items-center justify-between border-b border-slate-200 px-6 py-5">
+          <div>
+            <h2 class="text-xl font-semibold text-slate-900">Giỏ hàng của bạn</h2>
+            <p class="text-sm text-slate-500">Kiểm tra sản phẩm và hoàn tất thanh toán.</p>
+          </div>
+          <button id="closeCart" class="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200">Đóng</button>
+        </div>
+        <div class="px-6 py-6">
+          <div id="cartItems" class="space-y-4">
+            <p class="text-slate-500">Chưa có sản phẩm trong giỏ hàng.</p>
+          </div>
+        </div>
+        <div class="flex flex-col gap-4 border-t border-slate-200 bg-slate-50 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p class="text-sm text-slate-500">Tổng</p>
+            <p id="cartTotal" class="mt-1 text-2xl font-semibold text-slate-900">0₫</p>
+          </div>
+          <button id="checkoutBtn" class="rounded-full bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-indigo-500">Thanh toán</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="cartToast" class="cart-toast">Đã thêm sản phẩm vào giỏ hàng!</div>
+
+    <script>
+      const cartBtn = document.getElementById('cartBtn');
+      const cartModal = document.getElementById('cartModal');
+      const closeCart = document.getElementById('closeCart');
+      const cartItems = document.getElementById('cartItems');
+      const cartTotal = document.getElementById('cartTotal');
+      const checkoutBtn = document.getElementById('checkoutBtn');
+      const cartBadge = cartBtn.querySelector('span');
+      const productGrid = document.getElementById('productGrid');
+      const authBtn = document.getElementById('authBtn');
+      const userBadge = document.getElementById('userBadge');
+      const userName = document.getElementById('userName');
+      const userRole = document.getElementById('userRole');
+      const loginModal = document.getElementById('loginModal');
+      const closeLogin = document.getElementById('closeLogin');
+      const loginForm = document.getElementById('loginForm');
+      const loginUsername = document.getElementById('loginUsername');
+      const loginPassword = document.getElementById('loginPassword');
+      const adminPanel = document.getElementById('adminPanel');
+      const adminStatsTotal = document.getElementById('adminStatsTotal');
+      const adminStatsValue = document.getElementById('adminStatsValue');
+      const adminStatsOrders = document.getElementById('adminStatsOrders');
+      const newProductForm = document.getElementById('newProductForm');
+      const newProductName = document.getElementById('newProductName');
+      const newProductPrice = document.getElementById('newProductPrice');
+      const newProductTag = document.getElementById('newProductTag');
+      const newProductDesc = document.getElementById('newProductDesc');
+      const newProductSpecs = document.getElementById('newProductSpecs');
+      const cartToast = document.getElementById('cartToast');
+
+      const users = {
+        admin: { password: 'admin123', role: 'ADMIN', name: 'Admin' },
+        user: { password: 'user123', role: 'USER', name: 'Người dùng' }
+      };
+
+      let currentUser = null;
+      let cart = [];
+      let totalOrders = 0;
+
+      const products = [
+        {
+          name: 'ProBlade 16',
+          price: 26490000,
+          tag: 'Bestseller',
+          tagColor: 'bg-emerald-100 text-emerald-700',
+          img: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80',
+          description: 'Laptop gaming mỏng nhẹ, màn hình 16" 240Hz.',
+          specs: ['Intel Core i7', 'RTX 4070']
+        },
+        {
+          name: 'UltraWork 15',
+          price: 32990000,
+          tag: 'Workstation',
+          tagColor: 'bg-indigo-100 text-indigo-700',
+          img: 'https://images.unsplash.com/photo-1527430253228-e93688616381?auto=format&fit=crop&w=800&q=80',
+          description: 'Kết hợp hiệu năng và bền bỉ cho công việc chuyên sâu.',
+          specs: ['Ryzen 9', '32GB RAM']
+        },
+        {
+          name: 'CreatorFlow 14',
+          price: 29990000,
+          tag: 'Creator',
+          tagColor: 'bg-slate-100 text-slate-700',
+          img: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80',
+          description: 'Thiết kế sáng tạo, hiển thị rực rỡ và pin lâu dài.',
+          specs: ['OLED 2.8K', '1TB SSD']
+        },
+        {
+          name: 'AirPro 13',
+          price: 18990000,
+          tag: 'Light',
+          tagColor: 'bg-blue-100 text-blue-700',
+          img: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80',
+          description: 'Laptop siêu mỏng nhẹ, phù hợp học tập và văn phòng.',
+          specs: ['Intel Core i5', '16GB RAM']
+        },
+        {
+          name: 'BattleMax 17',
+          price: 38990000,
+          tag: 'Gaming',
+          tagColor: 'bg-pink-100 text-pink-700',
+          img: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80',
+          description: 'Màn hình 17" cực đã, loa sống động và cấu hình chiến tốt.',
+          specs: ['Intel Core i9', 'RTX 4080']
+        },
+        {
+          name: 'StudioZen 16',
+          price: 34990000,
+          tag: 'Design',
+          tagColor: 'bg-violet-100 text-violet-700',
+          img: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80',
+          description: 'Hiệu năng vẽ, dựng phim và sáng tạo nội dung chuyên nghiệp.',
+          specs: ['Ryzen 7', '2TB SSD']
+        },
+        {
+          name: 'CampusPro 14',
+          price: 21990000,
+          tag: 'Office',
+          tagColor: 'bg-sky-100 text-sky-700',
+          img: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80',
+          description: 'Laptop văn phòng ổn định, pin 10 giờ và mở máy nhanh.',
+          specs: ['Intel Core i5', '256GB SSD']
+        },
+        {
+          name: 'CreatorMax 16',
+          price: 37990000,
+          tag: 'Creator',
+          tagColor: 'bg-violet-100 text-violet-700',
+          img: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80',
+          description: 'Xử lý đồ họa, video và livestream mượt mà.',
+          specs: ['M2 Pro', '32GB RAM']
+        },
+        {
+          name: 'TitanX 15',
+          price: 42990000,
+          tag: 'Ultimate',
+          tagColor: 'bg-rose-100 text-rose-700',
+          img: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80',
+          description: 'Laptop mạnh nhất, dành cho game thủ và biên tập viên chuyên nghiệp.',
+          specs: ['Core i9', 'RTX 4090']
+        }
+      ];
+
+      function formatCurrency(amount) {
+        return amount.toLocaleString('vi-VN') + '₫';
+      }
+
+      function showCartToast(message) {
+        if (!cartToast) return;
+        cartToast.textContent = message;
+        cartToast.classList.add('show');
+        clearTimeout(window.cartToastTimeout);
+        window.cartToastTimeout = setTimeout(() => {
+          cartToast.classList.remove('show');
+        }, 1300);
+      }
+
+      function renderProducts() {
+        productGrid.innerHTML = products
+          .map((product, index) => `
+            <article class="product-card group overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-2">
+              <div class="flex justify-between items-start">
+                <div class="rounded-3xl bg-slate-100 p-4">
+                  <img src="${product.img}" alt="${product.name}" class="h-20 w-20 object-cover rounded-2xl" />
+                </div>
+                <span class="rounded-full ${product.tagColor} px-3 py-1 text-xs font-semibold">${product.tag}</span>
+              </div>
+              <div class="mt-6 space-y-4">
+                <div>
+                  <h3 class="text-xl font-semibold text-slate-900">${product.name}</h3>
+                  <p class="text-slate-500">${product.description}</p>
+                </div>
+                <div class="grid gap-3 sm:grid-cols-2">
+                  ${product.specs.map(spec => `<div class="rounded-3xl bg-slate-50 p-4 text-sm text-slate-600">${spec}</div>`).join('')}
+                </div>
+                <div class="flex items-center justify-between gap-4">
+                  <div>
+                    <p class="text-sm text-slate-500">Giá</p>
+                    <p class="text-2xl font-semibold text-slate-900">${formatCurrency(product.price)}</p>
+                  </div>
+                  <button data-index="${index}" class="add-to-cart rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">
+                    Thêm vào giỏ
+                  </button>
+                </div>
+              </div>
+            </article>
+          `)
+          .join('');
+
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+          button.addEventListener('click', () => {
+            const index = Number(button.dataset.index);
+            const product = products[index];
+            button.animate(
+              [
+                { transform: 'scale(1)' },
+                { transform: 'scale(0.96)' },
+                { transform: 'scale(1)' }
+              ],
+              { duration: 180, easing: 'ease-out' }
+            );
+            addToCart(product.name, product.price);
+            showCartToast(`Đã thêm ${product.name} vào giỏ!`);
+          });
+        });
+      }
+
+      function updateCart() {
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+        cartBadge.textContent = totalItems;
+        cartTotal.textContent = formatCurrency(totalPrice);
+
+        if (cart.length === 0) {
+          cartItems.innerHTML = '<p class="text-slate-500">Chưa có sản phẩm trong giỏ hàng.</p>';
+          return;
+        }
+
+        cartItems.innerHTML = cart
+          .map((item, index) => `
+            <div class="flex items-center justify-between rounded-[1.5rem] border border-slate-200 p-4">
+              <div>
+                <h3 class="font-semibold text-slate-900">${item.name}</h3>
+                <p class="text-sm text-slate-500">Số lượng: ${item.quantity}</p>
+              </div>
+              <div class="text-right">
+                <p class="font-semibold text-slate-900">${formatCurrency(item.price * item.quantity)}</p>
+                <button data-index="${index}" class="mt-2 text-sm text-indigo-600 hover:text-indigo-800 remove-item">Xóa</button>
+              </div>
+            </div>
+          `)
+          .join('');
+
+        document.querySelectorAll('.remove-item').forEach(button => {
+          button.addEventListener('click', () => {
+            const index = Number(button.dataset.index);
+            cart.splice(index, 1);
+            updateCart();
+          });
+        });
+      }
+
+      function addToCart(name, price) {
+        const existingItem = cart.find(item => item.name === name);
+        if (existingItem) {
+          existingItem.quantity += 1;
+        } else {
+          cart.push({ name, price, quantity: 1 });
+        }
+        updateCart();
+        cartModal.classList.remove('hidden');
+      }
+
+      function updateAdminPanel() {
+        const totalValue = products.reduce((sum, product) => sum + product.price, 0);
+        adminStatsTotal.textContent = products.length;
+        adminStatsValue.textContent = formatCurrency(totalValue);
+        adminStatsOrders.textContent = totalOrders;
+
+        if (currentUser?.role === 'ADMIN') {
+          adminPanel.classList.remove('hidden');
+        } else {
+          adminPanel.classList.add('hidden');
+        }
+      }
+
+      function setAuthState(user) {
+        currentUser = user;
+        if (!user) {
+          authBtn.textContent = 'Đăng nhập';
+          userBadge.classList.add('hidden');
+          userName.textContent = 'Khách';
+          userRole.textContent = 'USER';
+        } else {
+          authBtn.textContent = 'Đăng xuất';
+          userBadge.classList.remove('hidden');
+          userName.textContent = user.name;
+          userRole.textContent = user.role;
+          userRole.classList.toggle('bg-indigo-100', user.role === 'ADMIN');
+          userRole.classList.toggle('bg-slate-100', user.role !== 'ADMIN');
+        }
+        updateAdminPanel();
+      }
+
+      function openLogin() {
+        loginUsername.value = '';
+        loginPassword.value = '';
+        loginModal.classList.remove('hidden');
+      }
+
+      function closeLoginModal() {
+        loginModal.classList.add('hidden');
+      }
+
+      authBtn.addEventListener('click', () => {
+        if (currentUser) {
+          setAuthState(null);
+        } else {
+          openLogin();
+        }
+      });
+
+      closeLogin.addEventListener('click', closeLoginModal);
+      loginModal.addEventListener('click', event => {
+        if (event.target === loginModal) {
+          closeLoginModal();
+        }
+      });
+
+      loginForm.addEventListener('submit', event => {
+        event.preventDefault();
+        const username = loginUsername.value.trim();
+        const password = loginPassword.value.trim();
+        const user = users[username];
+
+        if (user && user.password === password) {
+          setAuthState(user);
+          closeLoginModal();
+          return;
+        }
+
+        alert('Tên đăng nhập hoặc mật khẩu không đúng. Vui lòng thử lại.');
+      });
+
+      cartBtn.addEventListener('click', () => {
+        cartModal.classList.toggle('hidden');
+      });
+
+      closeCart.addEventListener('click', () => {
+        cartModal.classList.add('hidden');
+      });
+
+      checkoutBtn.addEventListener('click', () => {
+        if (cart.length === 0) return;
+        totalOrders += 1;
+        alert('Cảm ơn bạn đã đặt hàng! Chúng tôi sẽ liên hệ sớm nhất.');
+        cart = [];
+        updateCart();
+        cartModal.classList.add('hidden');
+        updateAdminPanel();
+      });
+
+      newProductForm.addEventListener('submit', event => {
+        event.preventDefault();
+        const name = newProductName.value.trim();
+        const price = Number(newProductPrice.value);
+        const tag = newProductTag.value.trim() || 'New';
+        const description = newProductDesc.value.trim();
+        const specs = newProductSpecs.value ? newProductSpecs.value.split(',').map(item => item.trim()).filter(Boolean) : [];
+
+        products.push({
+          name,
+          price,
+          tag,
+          tagColor: 'bg-indigo-100 text-indigo-700',
+          img: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80',
+          description,
+          specs: specs.length ? specs : ['Cấu hình mới']
+        });
+
+        renderProducts();
+        updateAdminPanel();
+        newProductForm.reset();
+        alert('Đã thêm sản phẩm mới vào danh sách.');
+      });
+
+      renderProducts();
+      updateCart();
+      setAuthState(null);
+    </script>
+  </body>
+</html>
