@@ -108,6 +108,10 @@
                     <tr>
                       <th class="px-4 py-3 font-semibold text-slate-600">Mã đơn</th>
                       <th class="px-4 py-3 font-semibold text-slate-600">Khách hàng</th>
+                      <th class="px-4 py-3 font-semibold text-slate-600">Email</th>
+                      <th class="px-4 py-3 font-semibold text-slate-600">Số điện thoại</th>
+                      <th class="px-4 py-3 font-semibold text-slate-600">Địa chỉ</th>
+                      <th class="px-4 py-3 font-semibold text-slate-600">Ghi chú</th>
                       <th class="px-4 py-3 font-semibold text-slate-600">Sản phẩm</th>
                       <th class="px-4 py-3 font-semibold text-slate-600">Tổng tiền</th>
                       <th class="px-4 py-3 font-semibold text-slate-600">Trạng thái</th>
@@ -364,16 +368,12 @@
           .map(order => `
             <tr class="border-b border-slate-200">
               <td class="px-4 py-4 font-medium text-slate-900">${order.id}</td>
-              <td class="px-4 py-4 text-slate-600">
-                <div class="font-medium">${order.customer}</div>
-                <div class="text-xs text-slate-400">${order.email}</div>
-                <div class="text-xs text-slate-400">${order.phone}</div>
-              </td>
-              <td class="px-4 py-4 text-slate-600">
-                <div class="max-w-xs truncate" title="${order.product}">${order.product}</div>
-                ${order.address ? `<div class="text-xs text-slate-400 mt-1 max-w-xs truncate" title="${order.address}">📍 ${order.address}</div>` : ''}
-                ${order.note ? `<div class="text-xs text-slate-400 mt-1 max-w-xs truncate" title="${order.note}">📝 ${order.note}</div>` : ''}
-              </td>
+              <td class="px-4 py-4 text-slate-600">${order.customer}</td>
+              <td class="px-4 py-4 text-slate-600">${order.email}</td>
+              <td class="px-4 py-4 text-slate-600">${order.phone}</td>
+              <td class="px-4 py-4 text-slate-600 max-w-[180px] break-words">${order.address || '-'}</td>
+              <td class="px-4 py-4 text-slate-600 max-w-[180px] break-words">${order.note || '-'}</td>
+              <td class="px-4 py-4 text-slate-600 max-w-[200px] truncate" title="${order.product}">${order.product}</td>
               <td class="px-4 py-4 text-slate-900">${formatCurrency(order.total)}</td>
               <td class="px-4 py-4">
                 <span class="inline-flex rounded-full px-3 py-1 text-xs font-semibold ${order.status === 'Hoàn thành' ? 'bg-emerald-100 text-emerald-700' : order.status === 'Đang giao' ? 'bg-indigo-100 text-indigo-700' : order.status === 'Chờ xác nhận' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-700'}">${order.status}</span>
