@@ -76,8 +76,46 @@
                 <p id="dashTotalOrders" class="mt-4 text-3xl font-semibold text-slate-900">0</p>
               </div>
               <div class="rounded-[2rem] bg-white p-6 shadow-sm">
-                <p class="text-sm text-slate-500">Danh mục</p>
-                <p id="dashTotalCategories" class="mt-4 text-3xl font-semibold text-slate-900">0</p>
+                <p class="text-sm text-slate-500">Khách hàng</p>
+                <p id="dashTotalCustomers" class="mt-4 text-3xl font-semibold text-slate-900">0</p>
+              </div>
+            </div>
+            <div class="grid gap-4 lg:grid-cols-3">
+              <div class="rounded-[2rem] bg-white p-6 shadow-sm">
+                <p class="text-sm text-slate-500">Đơn đang xử lý</p>
+                <p id="dashPendingOrders" class="mt-4 text-3xl font-semibold text-slate-900">0</p>
+              </div>
+              <div class="rounded-[2rem] bg-white p-6 shadow-sm">
+                <p class="text-sm text-slate-500">Doanh thu</p>
+                <p id="dashRevenue" class="mt-4 text-3xl font-semibold text-slate-900">0₫</p>
+              </div>
+              <div class="rounded-[2rem] bg-white p-6 shadow-sm">
+                <p class="text-sm text-slate-500">Đơn hoàn thành</p>
+                <p id="dashCompletedOrders" class="mt-4 text-3xl font-semibold text-slate-900">0</p>
+              </div>
+            </div>
+            <div class="rounded-[2rem] bg-white p-6 shadow-sm">
+              <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h3 class="text-xl font-semibold text-slate-900">Đơn hàng gần đây</h3>
+                  <p class="text-sm text-slate-500">Xem chi tiết đơn hàng và thông tin người đặt.</p>
+                </div>
+                <span class="rounded-full bg-slate-100 px-4 py-2 text-sm text-slate-600">Cập nhật tự động</span>
+              </div>
+              <div class="mt-6 overflow-x-auto">
+                <table class="min-w-full divide-y divide-slate-200 text-left text-sm">
+                  <thead class="bg-slate-50">
+                    <tr>
+                      <th class="px-4 py-3 font-semibold text-slate-600">Mã đơn</th>
+                      <th class="px-4 py-3 font-semibold text-slate-600">Khách hàng</th>
+                      <th class="px-4 py-3 font-semibold text-slate-600">Sản phẩm</th>
+                      <th class="px-4 py-3 font-semibold text-slate-600">Tổng tiền</th>
+                      <th class="px-4 py-3 font-semibold text-slate-600">Trạng thái</th>
+                      <th class="px-4 py-3 font-semibold text-slate-600">Ngày</th>
+                    </tr>
+                  </thead>
+                  <tbody id="adminOrderList" class="divide-y divide-slate-200 bg-white"></tbody>
+                </table>
               </div>
             </div>
             <div class="grid gap-6 lg:grid-cols-2">
@@ -181,7 +219,11 @@
       const dashTotalProducts = document.getElementById('dashTotalProducts');
       const dashTotalValue = document.getElementById('dashTotalValue');
       const dashTotalOrders = document.getElementById('dashTotalOrders');
-      const dashTotalCategories = document.getElementById('dashTotalCategories');
+      const dashTotalCustomers = document.getElementById('dashTotalCustomers');
+      const dashPendingOrders = document.getElementById('dashPendingOrders');
+      const dashRevenue = document.getElementById('dashRevenue');
+      const dashCompletedOrders = document.getElementById('dashCompletedOrders');
+      const adminOrderList = document.getElementById('adminOrderList');
       const adminProductList = document.getElementById('adminProductList');
       const adminSearch = document.getElementById('adminSearch');
       const adminNewProductForm = document.getElementById('adminNewProductForm');
@@ -200,9 +242,17 @@
       const editProductForm = document.getElementById('editProductForm');
       const closeEditModal = document.getElementById('closeEditModal');
 
-      let totalOrders = 32;
-      let currentEditIndex = null;
-      const products = [
+      const STORAGE_KEYS = {
+        products: 'lapTopProducts',
+        cart: 'lapTopCart',
+        users: 'lapTopUsers',
+        currentUser: 'lapTopCurrentUser',
+        totalOrders: 'lapTopTotalOrders',
+        registerRequests: 'lapTopRegisterRequests',
+        orders: 'lapTopOrders'
+      };
+
+      const defaultProducts = [
         { name: 'ProBlade 16', price: 26490000, tag: 'Bestseller', description: 'Laptop gaming mỏng nhẹ, màn hình 16" 240Hz.', specs: ['Intel Core i7', 'RTX 4070'] },
         { name: 'UltraWork 15', price: 32990000, tag: 'Workstation', description: 'Kết hợp hiệu năng và bền bỉ cho công việc chuyên sâu.', specs: ['Ryzen 9', '32GB RAM'] },
         { name: 'CreatorFlow 14', price: 29990000, tag: 'Creator', description: 'Thiết kế sáng tạo, hiển thị rực rỡ và pin lâu dài.', specs: ['OLED 2.8K', '1TB SSD'] },
@@ -213,6 +263,35 @@
         { name: 'CreatorMax 16', price: 37990000, tag: 'Creator', description: 'Xử lý đồ họa, video và livestream mượt mà.', specs: ['M2 Pro', '32GB RAM'] },
         { name: 'TitanX 15', price: 42990000, tag: 'Ultimate', description: 'Laptop mạnh nhất, dành cho game thủ và biên tập viên chuyên nghiệp.', specs: ['Core i9', 'RTX 4090'] }
       ];
+
+      let products = [...defaultProducts];
+      let orders = [];
+      let totalOrders = 0;
+      let currentEditIndex = null;
+
+      function loadStorage(key, fallback) {
+        const raw = localStorage.getItem(key);
+        if (!raw) return fallback;
+        try {
+          return JSON.parse(raw);
+        } catch (error) {
+          return fallback;
+        }
+      }
+
+      function saveStorage(key, value) {
+        localStorage.setItem(key, JSON.stringify(value));
+      }
+
+      function loadAppState() {
+        const storedProducts = loadStorage(STORAGE_KEYS.products, null);
+        products = storedProducts && Array.isArray(storedProducts) && storedProducts.length ? storedProducts : [...defaultProducts];
+
+        const storedOrders = loadStorage(STORAGE_KEYS.orders, []);
+        orders = Array.isArray(storedOrders) ? storedOrders : [];
+
+        totalOrders = orders.length;
+      }
 
       function formatCurrency(amount) {
         return amount.toLocaleString('vi-VN') + '₫';
@@ -264,11 +343,45 @@
 
       function refreshDashboard() {
         const categories = [...new Set(products.map(product => product.tag))];
+        const customers = [...new Set(orders.map(order => order.customer))];
+        const pendingOrders = orders.filter(order => order.status !== 'Hoàn thành').length;
+        const completedOrders = orders.filter(order => order.status === 'Hoàn thành').length;
+        const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
+
         dashTotalProducts.textContent = products.length;
         dashTotalValue.textContent = formatCurrency(products.reduce((sum, item) => sum + item.price, 0));
-        dashTotalOrders.textContent = totalOrders;
-        dashTotalCategories.textContent = categories.length;
+        dashTotalOrders.textContent = orders.length;
+        dashTotalCustomers.textContent = customers.length;
+        dashPendingOrders.textContent = pendingOrders;
+        dashCompletedOrders.textContent = completedOrders;
+        dashRevenue.textContent = formatCurrency(totalRevenue);
         renderProductList(adminSearch.value);
+        renderOrderList();
+      }
+
+      function renderOrderList() {
+        adminOrderList.innerHTML = orders
+          .map(order => `
+            <tr class="border-b border-slate-200">
+              <td class="px-4 py-4 font-medium text-slate-900">${order.id}</td>
+              <td class="px-4 py-4 text-slate-600">
+                <div class="font-medium">${order.customer}</div>
+                <div class="text-xs text-slate-400">${order.email}</div>
+                <div class="text-xs text-slate-400">${order.phone}</div>
+              </td>
+              <td class="px-4 py-4 text-slate-600">
+                <div class="max-w-xs truncate" title="${order.product}">${order.product}</div>
+                ${order.address ? `<div class="text-xs text-slate-400 mt-1 max-w-xs truncate" title="${order.address}">📍 ${order.address}</div>` : ''}
+                ${order.note ? `<div class="text-xs text-slate-400 mt-1 max-w-xs truncate" title="${order.note}">📝 ${order.note}</div>` : ''}
+              </td>
+              <td class="px-4 py-4 text-slate-900">${formatCurrency(order.total)}</td>
+              <td class="px-4 py-4">
+                <span class="inline-flex rounded-full px-3 py-1 text-xs font-semibold ${order.status === 'Hoàn thành' ? 'bg-emerald-100 text-emerald-700' : order.status === 'Đang giao' ? 'bg-indigo-100 text-indigo-700' : order.status === 'Chờ xác nhận' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-700'}">${order.status}</span>
+              </td>
+              <td class="px-4 py-4 text-slate-600">${order.date}</td>
+            </tr>
+          `)
+          .join('');
       }
 
       function openEditModal(index) {
@@ -361,6 +474,7 @@
         setAdminMode(false);
       });
 
+      loadAppState();
       setAdminMode(false);
     </script>
   </body>

@@ -90,7 +90,7 @@
         </div>
       </header>
       <main>
-        <section class="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-slate-950 via-indigo-700 to-slate-900 px-6 py-12 text-white shadow-[0_40px_120px_rgba(15,23,42,0.22)]">
+        <section class="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-slate-950 via-indigo-700 to-slate-900 px-6 py-12 text-white shadow-[0_40px_120px_rgba(15,23,42,0.22)]" style="background-image: linear-gradient(180deg, rgba(15,23,42,0.72) 0%, rgba(15,23,42,0.88) 100%), url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1350&q=80'); background-size: cover; background-position: center;">
           <div class="pointer-events-none absolute inset-0 opacity-30">
             <div class="absolute -left-16 top-16 h-52 w-52 rounded-full bg-cyan-400/20 blur-3xl"></div>
             <div class="absolute right-0 top-24 h-72 w-72 rounded-full bg-white/10 blur-3xl"></div>
@@ -395,6 +395,34 @@
       </div>
     </div>
 
+    <div id="productDetailModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/75 p-4">
+      <div class="w-full max-w-3xl overflow-hidden rounded-[2rem] bg-white shadow-2xl">
+        <div class="flex items-start justify-between border-b border-slate-200 px-6 py-5">
+          <div>
+            <p id="detailTag" class="text-sm uppercase tracking-[0.18em] text-slate-500"></p>
+            <h2 id="detailTitle" class="mt-2 text-3xl font-semibold text-slate-900"></h2>
+          </div>
+          <button id="closeDetail" class="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200">Đóng</button>
+        </div>
+        <div class="grid gap-6 lg:grid-cols-[0.9fr,0.65fr] px-6 py-6">
+          <div>
+            <img id="detailImg" src="" alt="" class="h-80 w-full rounded-[1.5rem] object-cover" />
+          </div>
+          <div class="space-y-5">
+            <div>
+              <p id="detailDescription" class="text-slate-600"></p>
+            </div>
+            <div class="grid gap-3 sm:grid-cols-2" id="detailSpecs"></div>
+            <div class="rounded-[1.5rem] bg-slate-100 p-5">
+              <p class="text-sm text-slate-500">Giá</p>
+              <p id="detailPrice" class="mt-2 text-3xl font-semibold text-slate-900"></p>
+            </div>
+            <button id="detailAddToCart" class="inline-flex w-full justify-center rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-slate-800">Thêm vào giỏ</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id="cartModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/75 p-4">
       <div class="w-full max-w-2xl overflow-hidden rounded-[2rem] bg-white shadow-2xl">
         <div class="flex items-center justify-between border-b border-slate-200 px-6 py-5">
@@ -420,6 +448,47 @@
     </div>
 
     <div id="cartToast" class="cart-toast">Đã thêm sản phẩm vào giỏ hàng!</div>
+
+    <div id="checkoutModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/75 p-4">
+      <div class="w-full max-w-lg overflow-hidden rounded-[2rem] bg-white shadow-2xl">
+        <div class="flex items-center justify-between border-b border-slate-200 px-6 py-5">
+          <div>
+            <h2 class="text-xl font-semibold text-slate-900">Thông tin đặt hàng</h2>
+            <p class="text-sm text-slate-500">Vui lòng điền thông tin để hoàn tất đơn hàng.</p>
+          </div>
+          <button id="closeCheckout" class="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200">Đóng</button>
+        </div>
+        <form id="checkoutForm" class="px-6 py-6 space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-700">Họ và tên *</label>
+            <input id="checkoutName" type="text" required class="mt-2 w-full rounded-3xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700">Email *</label>
+            <input id="checkoutEmail" type="email" required class="mt-2 w-full rounded-3xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700">Số điện thoại *</label>
+            <input id="checkoutPhone" type="tel" required class="mt-2 w-full rounded-3xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700">Địa chỉ giao hàng *</label>
+            <textarea id="checkoutAddress" rows="3" required placeholder="Nhập địa chỉ chi tiết..." class="mt-2 w-full rounded-3xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500"></textarea>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700">Ghi chú</label>
+            <textarea id="checkoutNote" rows="2" placeholder="Ghi chú thêm (tùy chọn)..." class="mt-2 w-full rounded-3xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500"></textarea>
+          </div>
+          <div class="pt-4 border-t border-slate-200">
+            <div class="flex justify-between items-center mb-4">
+              <span class="text-sm text-slate-600">Tổng tiền:</span>
+              <span id="checkoutTotal" class="text-xl font-semibold text-slate-900">0₫</span>
+            </div>
+            <button type="submit" class="inline-flex w-full justify-center rounded-full bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-indigo-500">Xác nhận đặt hàng</button>
+          </div>
+        </form>
+      </div>
+    </div>
 
     <script>
       const cartBtn = document.getElementById('cartBtn');
@@ -462,22 +531,45 @@
       const newProductDesc = document.getElementById('newProductDesc');
       const newProductSpecs = document.getElementById('newProductSpecs');
       const cartToast = document.getElementById('cartToast');
+      const productDetailModal = document.getElementById('productDetailModal');
+      const closeDetail = document.getElementById('closeDetail');
+      const detailTitle = document.getElementById('detailTitle');
+      const detailTag = document.getElementById('detailTag');
+      const detailImg = document.getElementById('detailImg');
+      const detailDescription = document.getElementById('detailDescription');
+      const detailSpecs = document.getElementById('detailSpecs');
+      const detailPrice = document.getElementById('detailPrice');
+      const detailAddToCart = document.getElementById('detailAddToCart');
       const registerForm = document.getElementById('registerForm');
       const registerName = document.getElementById('registerName');
       const registerEmail = document.getElementById('registerEmail');
       const registerPhone = document.getElementById('registerPhone');
       const registerMessage = document.getElementById('registerMessage');
+      const checkoutModal = document.getElementById('checkoutModal');
+      const closeCheckout = document.getElementById('closeCheckout');
+      const checkoutForm = document.getElementById('checkoutForm');
+      const checkoutName = document.getElementById('checkoutName');
+      const checkoutEmail = document.getElementById('checkoutEmail');
+      const checkoutPhone = document.getElementById('checkoutPhone');
+      const checkoutAddress = document.getElementById('checkoutAddress');
+      const checkoutNote = document.getElementById('checkoutNote');
+      const checkoutTotal = document.getElementById('checkoutTotal');
 
-      const users = {
-        admin: { password: 'admin123', role: 'ADMIN', name: 'Admin' },
-        user: { password: 'user123', role: 'USER', name: 'Người dùng' }
+      const STORAGE_KEYS = {
+        products: 'lapTopProducts',
+        cart: 'lapTopCart',
+        users: 'lapTopUsers',
+        currentUser: 'lapTopCurrentUser',
+        totalOrders: 'lapTopTotalOrders',
+        registerRequests: 'lapTopRegisterRequests'
       };
 
-      let currentUser = null;
-      let cart = [];
-      let totalOrders = 0;
+      const defaultUsers = {
+        admin: { username: 'admin', password: 'admin123', role: 'ADMIN', name: 'Admin' },
+        user: { username: 'user', password: 'user123', role: 'USER', name: 'Người dùng' }
+      };
 
-      const products = [
+      const defaultProducts = [
         {
           name: 'ProBlade 16',
           price: 26490000,
@@ -561,6 +653,65 @@
         }
       ];
 
+      let users = { ...defaultUsers };
+      let currentUser = null;
+      let cart = [];
+      let totalOrders = 0;
+      let products = [...defaultProducts];
+      let registerRequests = [];
+      let orders = [];
+
+      function loadStorage(key, fallback) {
+        const raw = localStorage.getItem(key);
+        if (!raw) return fallback;
+        try {
+          return JSON.parse(raw);
+        } catch (error) {
+          return fallback;
+        }
+      }
+
+      function saveStorage(key, value) {
+        localStorage.setItem(key, JSON.stringify(value));
+      }
+
+      function loadAppState() {
+        const storedProducts = loadStorage(STORAGE_KEYS.products, null);
+        products = storedProducts && Array.isArray(storedProducts) && storedProducts.length ? storedProducts : [...defaultProducts];
+
+        const storedUsers = loadStorage(STORAGE_KEYS.users, null);
+        users = { ...defaultUsers };
+        if (storedUsers && typeof storedUsers === 'object') {
+          Object.entries(storedUsers).forEach(([username, userData]) => {
+            users[username] = { ...defaultUsers[username], ...userData, username };
+          });
+        }
+
+        const storedCart = loadStorage(STORAGE_KEYS.cart, []);
+        cart = Array.isArray(storedCart) ? storedCart : [];
+
+        totalOrders = Number(loadStorage(STORAGE_KEYS.totalOrders, 0)) || 0;
+        registerRequests = loadStorage(STORAGE_KEYS.registerRequests, []);
+        orders = loadStorage(STORAGE_KEYS.orders, []);
+
+        const storedCurrentUser = loadStorage(STORAGE_KEYS.currentUser, null);
+        if (storedCurrentUser && storedCurrentUser.username && users[storedCurrentUser.username]) {
+          currentUser = users[storedCurrentUser.username];
+        } else {
+          currentUser = null;
+        }
+      }
+
+      function saveAppState() {
+        saveStorage(STORAGE_KEYS.products, products);
+        saveStorage(STORAGE_KEYS.cart, cart);
+        saveStorage(STORAGE_KEYS.users, users);
+        saveStorage(STORAGE_KEYS.totalOrders, totalOrders);
+        saveStorage(STORAGE_KEYS.registerRequests, registerRequests);
+        saveStorage(STORAGE_KEYS.orders, orders);
+        saveStorage(STORAGE_KEYS.currentUser, currentUser ? { username: currentUser.username, role: currentUser.role, name: currentUser.name } : null);
+      }
+
       function formatCurrency(amount) {
         return amount.toLocaleString('vi-VN') + '₫';
       }
@@ -573,6 +724,28 @@
         window.cartToastTimeout = setTimeout(() => {
           cartToast.classList.remove('show');
         }, 1300);
+      }
+
+      function showProductDetail(index) {
+        const product = products[index];
+        if (!product) return;
+
+        detailTitle.textContent = product.name;
+        detailTag.textContent = product.tag;
+        detailImg.src = product.img;
+        detailImg.alt = product.name;
+        detailDescription.textContent = product.description;
+        detailPrice.textContent = formatCurrency(product.price);
+        detailSpecs.innerHTML = product.specs
+          .map(spec => `<div class="rounded-3xl bg-slate-100 p-4 text-sm text-slate-700">${spec}</div>`)
+          .join('');
+
+        detailAddToCart.dataset.index = index;
+        productDetailModal.classList.remove('hidden');
+      }
+
+      function closeProductDetail() {
+        productDetailModal.classList.add('hidden');
       }
 
       function renderProducts() {
@@ -593,13 +766,18 @@
                 <div class="grid gap-3 sm:grid-cols-2">
                   ${product.specs.map(spec => `<div class="rounded-3xl bg-slate-50 p-4 text-sm text-slate-600">${spec}</div>`).join('')}
                 </div>
-                <div class="flex items-center justify-between gap-4">
-                  <div>
-                    <p class="text-sm text-slate-500">Giá</p>
-                    <p class="text-2xl font-semibold text-slate-900">${formatCurrency(product.price)}</p>
+                <div class="flex flex-col gap-3">
+                  <div class="flex items-center justify-between gap-4">
+                    <div>
+                      <p class="text-sm text-slate-500">Giá</p>
+                      <p class="text-2xl font-semibold text-slate-900">${formatCurrency(product.price)}</p>
+                    </div>
+                    <button data-index="${index}" class="add-to-cart rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">
+                      Thêm vào giỏ
+                    </button>
                   </div>
-                  <button data-index="${index}" class="add-to-cart rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">
-                    Thêm vào giỏ
+                  <button data-index="${index}" class="view-detail rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition">
+                    Xem chi tiết
                   </button>
                 </div>
               </div>
@@ -623,6 +801,13 @@
             showCartToast(`Đã thêm ${product.name} vào giỏ!`);
           });
         });
+
+        document.querySelectorAll('.view-detail').forEach(button => {
+          button.addEventListener('click', () => {
+            const index = Number(button.dataset.index);
+            showProductDetail(index);
+          });
+        });
       }
 
       function updateCart() {
@@ -631,6 +816,7 @@
 
         cartBadge.textContent = totalItems;
         cartTotal.textContent = formatCurrency(totalPrice);
+        saveStorage(STORAGE_KEYS.cart, cart);
 
         if (cart.length === 0) {
           cartItems.innerHTML = '<p class="text-slate-500">Chưa có sản phẩm trong giỏ hàng.</p>';
@@ -701,11 +887,13 @@
           userRole.classList.toggle('bg-slate-100', user.role !== 'ADMIN');
         }
         updateAdminPanel();
+        saveStorage(STORAGE_KEYS.currentUser, currentUser ? { username: currentUser.username, role: currentUser.role, name: currentUser.name } : null);
       }
 
       function openLogin() {
         loginUsername.value = '';
         loginPassword.value = '';
+        setAuthTab('login');
         loginModal.classList.remove('hidden');
       }
 
@@ -725,6 +913,13 @@
       loginModal.addEventListener('click', event => {
         if (event.target === loginModal) {
           closeLoginModal();
+        }
+      });
+
+      closeDetail.addEventListener('click', closeProductDetail);
+      productDetailModal.addEventListener('click', event => {
+        if (event.target === productDetailModal) {
+          closeProductDetail();
         }
       });
 
@@ -766,11 +961,21 @@
           return;
         }
 
-        users[username] = { password, role: 'USER', name };
+        users[username] = { username, password, role: 'USER', name, email };
+        saveStorage(STORAGE_KEYS.users, users);
         setAuthState(users[username]);
         signUpForm.reset();
         alert('Đăng ký thành công! Bạn đã được đăng nhập.');
         closeLoginModal();
+      });
+
+      detailAddToCart.addEventListener('click', () => {
+        const index = Number(detailAddToCart.dataset.index);
+        const product = products[index];
+        if (!product) return;
+        addToCart(product.name, product.price);
+        showCartToast(`Đã thêm ${product.name} vào giỏ!`);
+        closeProductDetail();
       });
 
       function setAuthTab(tab) {
@@ -808,10 +1013,64 @@
 
       checkoutBtn.addEventListener('click', () => {
         if (cart.length === 0) return;
+        const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        checkoutTotal.textContent = formatCurrency(totalPrice);
+        checkoutModal.classList.remove('hidden');
+      });
+
+      closeCheckout.addEventListener('click', () => {
+        checkoutModal.classList.add('hidden');
+      });
+
+      checkoutModal.addEventListener('click', event => {
+        if (event.target === checkoutModal) {
+          checkoutModal.classList.add('hidden');
+        }
+      });
+
+      checkoutForm.addEventListener('submit', event => {
+        event.preventDefault();
+        const name = checkoutName.value.trim();
+        const email = checkoutEmail.value.trim();
+        const phone = checkoutPhone.value.trim();
+        const address = checkoutAddress.value.trim();
+        const note = checkoutNote.value.trim();
+
+        if (!name || !email || !phone || !address) {
+          alert('Vui lòng điền đầy đủ thông tin bắt buộc.');
+          return;
+        }
+
+        // Tạo đơn hàng mới
+        const orderId = 'DH' + String(totalOrders + 1).padStart(3, '0');
+        const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        const productNames = cart.map(item => `${item.name} (${item.quantity})`).join(', ');
+
+        const newOrder = {
+          id: orderId,
+          customer: name,
+          email: email,
+          phone: phone,
+          address: address,
+          note: note,
+          product: productNames,
+          total: totalPrice,
+          status: 'Chờ xác nhận',
+          date: new Date().toLocaleDateString('vi-VN')
+        };
+
+        orders.push(newOrder);
         totalOrders += 1;
-        alert('Cảm ơn bạn đã đặt hàng! Chúng tôi sẽ liên hệ sớm nhất.');
+
+        saveStorage(STORAGE_KEYS.orders, orders);
+        saveStorage(STORAGE_KEYS.totalOrders, totalOrders);
+
+        alert(`Cảm ơn ${name}! Đơn hàng ${orderId} đã được tạo thành công. Chúng tôi sẽ liên hệ sớm nhất.`);
+
         cart = [];
         updateCart();
+        checkoutForm.reset();
+        checkoutModal.classList.add('hidden');
         cartModal.classList.add('hidden');
         updateAdminPanel();
       });
@@ -834,6 +1093,7 @@
           specs: specs.length ? specs : ['Cấu hình mới']
         });
 
+        saveStorage(STORAGE_KEYS.products, products);
         renderProducts();
         updateAdminPanel();
         newProductForm.reset();
@@ -853,14 +1113,17 @@
             return;
           }
 
+          registerRequests.push({ name, email, phone, message, date: new Date().toLocaleString('vi-VN') });
+          saveStorage(STORAGE_KEYS.registerRequests, registerRequests);
           registerForm.reset();
           alert(`Cảm ơn ${name}! Chúng tôi sẽ liên hệ lại với bạn sớm nhất.`);
         });
       }
 
+      loadAppState();
       renderProducts();
       updateCart();
-      setAuthState(null);
+      setAuthState(currentUser);
     </script>
   </body>
 </html>
